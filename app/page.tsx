@@ -87,7 +87,7 @@ export default function Home() {
         const status = await getStatus();
         
         if (status.status === 'error') {
-          setError(status.message);
+          setError(status.message || 'Unknown error');
           setRecordingStatus('idle');
           setRecordingFeature(null);
           setTimeLeft(15);
