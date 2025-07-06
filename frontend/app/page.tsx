@@ -139,7 +139,7 @@ export default function Home() {
       setRecordingFeature(null);
       setTimeLeft(15);
     }
-  }, [timeLeft, recordingStatus, recordingFeature]);
+  }, [timeLeft, recordingStatus, recordingFeature, handleStopRecording]);
 
   // Recording handlers
   const handleStartRecording = async (feature: string) => {
@@ -328,7 +328,7 @@ export default function Home() {
                             <Activity className={`w-8 h-8 ${recordingFeature === feature ? 'animate-pulse' : ''}`} />
                           )}
                           <div className="space-y-1">
-                            <div>Record "{feature}"</div>
+                            <div>Record &quot;{feature}&quot;</div>
                             {recordingFeature === feature && (
                               <div className="text-sm font-normal">{timeLeft}s remaining</div>
                             )}

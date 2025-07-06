@@ -1,14 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-interface WebSocketMessage {
-  status: string;
-  result?: string;
-  message?: string;
-  progress?: number;
-  confidence?: number;
-  label?: string;
-}
-
 export const useWebSocket = (baseUrl: string) => {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);

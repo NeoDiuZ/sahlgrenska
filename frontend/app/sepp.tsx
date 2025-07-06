@@ -1,5 +1,5 @@
 import React from 'react';
-import { Circle, Line, ArrowRightIcon } from 'lucide-react';
+import { Circle } from 'lucide-react';
 
 export default function UseCaseDigram() {
   return (
