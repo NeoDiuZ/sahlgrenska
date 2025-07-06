@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Activity, AlertCircle, CheckCircle, XCircle, Loader2, Brain, Waves } from 'lucide-react';
@@ -127,21 +127,19 @@ export default function Home() {
     };
   }, [recordingStatus, timeLeft]);
 
-  // Timer effect to handle completion
-  useEffect(() => {
-    if (timeLeft === 0 && recordingStatus === 'recording') {
-      handleStopRecording();
-      // Immediately mark the motion as calibrated
+  // Recording handlers - define these before useEffect
+  const handleStopRecording = useCallback(async () => {
+    try {
       if (recordingFeature) {
-        setCalibratedFeatures(prev => new Set([...prev, recordingFeature]));
+        await stopRecording();
+        console.log('Stopping recording...');
       }
-      setRecordingStatus('idle');
-      setRecordingFeature(null);
-      setTimeLeft(15);
+    } catch (err) {
+      setError('Failed to stop recording');
+      console.error(err);
     }
-  }, [timeLeft, recordingStatus, recordingFeature, handleStopRecording]);
+  }, [recordingFeature]);
 
-  // Recording handlers
   const handleStartRecording = async (feature: string) => {
     try {
       setError(null);
@@ -159,17 +157,19 @@ export default function Home() {
     }
   };
 
-  const handleStopRecording = async () => {
-    try {
+  // Timer effect to handle completion
+  useEffect(() => {
+    if (timeLeft === 0 && recordingStatus === 'recording') {
+      handleStopRecording();
+      // Immediately mark the motion as calibrated
       if (recordingFeature) {
-        await stopRecording();
-        console.log('Stopping recording...');
+        setCalibratedFeatures(prev => new Set([...prev, recordingFeature]));
       }
-    } catch (err) {
-      setError('Failed to stop recording');
-      console.error(err);
+      setRecordingStatus('idle');
+      setRecordingFeature(null);
+      setTimeLeft(15);
     }
-  };
+  }, [timeLeft, recordingStatus, recordingFeature, handleStopRecording]);
 
   // Training handler
   const handleTraining = async () => {
